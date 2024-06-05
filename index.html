@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Simple To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Add new task">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        // Array to store tasks
+        let tasks = [];
+
+        // Function to add a new task
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+            if (taskText !== "") {
+                const task = { text: taskText, completed: false };
+                tasks.push(task);
+                displayTasks();
+                taskInput.value = "";
+            } else {
+                alert("Please enter a task!");
+            }
+        }
+
+        // Function to display tasks
+        function displayTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = ""; // Clear previous tasks
+
+            tasks.forEach((task, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <input type="checkbox" onchange="toggleTask(${index})" ${task.completed ? 'checked' : ''}>
+                    <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+                    <button onclick="deleteTask(${index})">Delete</button>
+                `;
+                taskList.appendChild(listItem);
+            });
+        }
+
+        // Function to toggle task completion status
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            displayTasks();
+        }
+
+        // Function to delete a task
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+
+        // Initial display of tasks
+        displayTasks();
+    </script>
+</body>
+</html>
